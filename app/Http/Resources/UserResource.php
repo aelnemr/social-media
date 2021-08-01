@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use AElnemr\RestFullResponse\Helper\EmptyData;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -18,7 +19,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'bio' => $this->profile->bio,
+            'bio' => $this->profile && $this->profile->bio ? $this->profile->bio : EmptyData::string(),
         ];
     }
 }

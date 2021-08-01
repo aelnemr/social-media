@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use AElnemr\RestFullResponse\CoreJsonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Exceptions\OAuthServerException;
 use Throwable;
 
@@ -44,9 +45,13 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($request->wantsJson()) {
-            if ($e instanceof OAuthServerException && $request->isJson()) {
+        if ($request->wantsJson() && ($request->is('api*'))) {
+            if ($e instanceof OAuthServerException) {
                 return $this->unauthorized(null, $e->getMessage());
+            }
+
+            if ($e instanceof ValidationException) {
+                return $this->invalidRequest($e->validator->errors()->toArray());
             }
         }
         return parent::render($request, $e);

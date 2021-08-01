@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\RegistrationContoller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +25,7 @@ Route::group([
         'prefix' => 'auth',
         'as' => 'auth.'
     ], function () {
-        Route::post('login', [LoginController::class, 'issueToken'])->name('login');
+        Route::post('login', [LoginController::class, 'login'])->name('login');
         Route::post('register', [RegistrationContoller::class, 'register'])->name('register');
     });
 });

@@ -2,40 +2,33 @@
 
 namespace App\Http\Controllers\API\V1\Auth;
 
-use AElnemr\RestFullResponse\CoreJsonResponse;
-use App\Http\Controllers\Controller;
-use Laravel\Passport\Exceptions\OAuthServerException;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
+use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Resources\UserResource;
 use Psr\Http\Message\ServerRequestInterface;
-use Nyholm\Psr7\Response as Psr7Response;
-use League\OAuth2\Server\Exception\OAuthServerException as LeagueException;
 
-class LoginController extends AccessTokenController
+class LoginController extends AuthController
 {
-    use CoreJsonResponse;
-
-    public function issueToken(ServerRequestInterface $request)
+    public function login(ServerRequestInterface $request)
     {
-        $response = $this->withErrorHandling(function () use ($request) {
-            return $this->convertResponse(
-                $this->server->respondToAccessTokenRequest($request, new Psr7Response)
-            );
-        });
+        //validation
+        $rules = [
+            'grant_type' => 'required',
+            'client_id' => 'required|exists:oauth_clients,id',
+            'client_secret' => 'required|exists:oauth_clients,secret',
+            'username' => 'required',
+            'password' => 'required',
+        ];
+        $data = $this->isValid($request, $rules);
 
+        // get token
+        $response = $this->accessTokenService->issueToken($request);
         $tokenData = json_decode($response->getContent(), true);
+        $tokenData['user'] = new UserResource(
+            \App\Models\User::query()
+                ->where('email', $data['username'])
+                ->firstOrFail()
+        );
 
         return $this->ok($tokenData);
-    }
-
-    protected function withErrorHandling($callback)
-    {
-        try {
-            return $callback();
-        } catch (LeagueException $e) {
-            throw new OAuthServerException(
-                $e,
-                $this->convertResponse($e->generateHttpResponse(new Psr7Response))
-            );
-        }
     }
 }

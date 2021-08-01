@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::post('login', [LoginController::class, 'issueToken'])->name('login');
-Route::post('register', [RegistrationContoller::class, 'register'])->name('register');
+Route::group([
+    'prefix' => '1.0',
+    'as' => 'v1.',
+    'namespace' => 'V1'
+], function () {
+    Route::group([
+        'namespace' => 'Auth',
+        'prefix' => 'auth',
+        'as' => 'auth.'
+    ], function () {
+        Route::post('login', [LoginController::class, 'issueToken'])->name('login');
+        Route::post('register', [RegistrationContoller::class, 'register'])->name('register');
+    });
+});

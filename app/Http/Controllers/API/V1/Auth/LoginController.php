@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use AElnemr\RestFullResponse\CoreJsonResponse;
-use App\Exceptions\UserInvalidLoginException;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Laravel\Passport\Exceptions\OAuthServerException;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Psr\Http\Message\ServerRequestInterface;

@@ -6,6 +6,7 @@ use AElnemr\RestFullResponse\CoreJsonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Laravel\Passport\Exceptions\OAuthServerException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -52,6 +53,10 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof ValidationException) {
                 return $this->invalidRequest($e->validator->errors()->toArray());
+            }
+
+            if ($e instanceof NotFoundHttpException) {
+                return $this->notFound();
             }
         }
         return parent::render($request, $e);

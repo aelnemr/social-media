@@ -28,4 +28,14 @@ Route::group([
         Route::post('login', [LoginController::class, 'login'])->name('login');
         Route::post('register', [RegistrationContoller::class, 'register'])->name('register');
     });
+
+    Route::middleware('auth:api')->group(function () {
+        Route::group(
+            [
+                'namespace' => 'Post',
+                'prefix' => 'feed',
+                'as' => 'feed.'],
+            base_path('routes/api/v1/feed.php')
+        );
+    });
 });

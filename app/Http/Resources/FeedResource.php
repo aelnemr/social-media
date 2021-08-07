@@ -19,6 +19,7 @@ class FeedResource extends JsonResource
             'color' => $this->color,
             'creator' => new UserResource($this->creator),
             'body' => $this->body,
+            'comments' => $this->comments,
             'created_at' => $this->created_at->timestamp,
         ];
     }

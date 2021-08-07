@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class PostFactory extends Factory
 {
@@ -22,7 +24,9 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'created_by' => User::query()->inRandomOrder()->first()->id,
+            'color' => Arr::random(['red', 'green', 'blue']),
+            'body' => $this->faker->realText(500)
         ];
     }
 }

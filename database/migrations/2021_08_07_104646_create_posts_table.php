@@ -15,7 +15,11 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->string('color')->default('green');
+            $table->text('body');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

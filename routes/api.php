@@ -30,6 +30,14 @@ Route::group([
     });
 
     Route::middleware('auth:api')->group(function () {
+        // users
+        Route::group(
+            ['namespace' => 'User',
+            'prefix' => 'users',
+            'as' => 'users.'],
+            base_path('routes/api/v1/user.php')
+        );
+        // feed
         Route::group(
             [
                 'namespace' => 'Post',
